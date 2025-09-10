@@ -1,0 +1,80 @@
+---
+
+---
+
+<div class="container">
+  <div class="top-bar">
+    <span>ADONIS MENDOZA</span>
+    <div class="menu">
+      <ul class="menu-items-container">
+        <li class="menu-items">WORKS</li>
+        <li class="menu-items">ABOUT ME</li>
+        <li class="menu-items">STACK</li>
+        <li class="menu-items">CONTACT</li>
+        <li class="menu-items button-close-menu">CLOSE MENU</li>
+      </ul>
+    </div>
+    <div class="button-menu-container">
+      <button class="button-menu">MENU</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .menu-items-container {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    transform: translateX(100%);
+  }
+
+  .menu-items {
+    list-style: none;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .menu-items-container-show {
+    transform: translateX(0);
+  }
+
+  @media (width >= 450px) {
+    .button-menu-container {
+      display: none;
+    }
+    .button-close-menu {
+      display: none;
+    }
+
+    .menu-items-container {
+      position: relative;
+      transform: translateX(0);
+    }
+  }
+</style>
+
+<script>
+  const menuButton = document.querySelector(".button-menu");
+  const menuItems = document.querySelector(".menu-items-container");
+  const closeMenuButton = document.querySelector(".button-close-menu");
+
+  closeMenuButton?.addEventListener("click", () => {
+    menuButton?.classList.remove("hidden");
+    menuItems?.classList.remove("menu-items-container-show");
+  });
+
+  menuButton?.addEventListener("click", () => {
+    menuButton.classList.add("hidden");
+
+    menuItems?.classList.add("menu-items-container-show");
+  });
+</script>
