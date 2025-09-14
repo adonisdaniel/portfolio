@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  stack: string[];
+}
+
+const { title, description, stack } = Astro.props;
+---
+
+<div>
+  <h2>{title}</h2>
+  <p>{description}</p>
+  <div>
+    <p>STACK: {stack.map((el) => <span>{el}</span>)}</p>
+  </div>
+</div>

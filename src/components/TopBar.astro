@@ -2,7 +2,7 @@
 
 ---
 
-<div class="container">
+<div class="">
   <div class="top-bar">
     <span>ADONIS MENDOZA</span>
     <div class="menu">
@@ -63,18 +63,18 @@
 </style>
 
 <script>
-  const menuButton = document.querySelector(".button-menu");
-  const menuItems = document.querySelector(".menu-items-container");
-  const closeMenuButton = document.querySelector(".button-close-menu");
+  const menuButton = document.querySelector('.button-menu');
+  const menuItems = document.querySelector('.menu-items-container');
+  const closeMenuButton = document.querySelector('.button-close-menu');
 
-  closeMenuButton?.addEventListener("click", () => {
-    menuButton?.classList.remove("hidden");
-    menuItems?.classList.remove("menu-items-container-show");
+  closeMenuButton?.addEventListener('click', () => {
+    menuButton?.classList.remove('hidden');
+    menuItems?.classList.remove('menu-items-container-show');
   });
 
-  menuButton?.addEventListener("click", () => {
-    menuButton.classList.add("hidden");
+  menuButton?.addEventListener('click', () => {
+    menuButton.classList.add('hidden');
 
-    menuItems?.classList.add("menu-items-container-show");
+    menuItems?.classList.add('menu-items-container-show');
   });
 </script>

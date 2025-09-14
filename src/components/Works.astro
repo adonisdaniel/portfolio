@@ -1,0 +1,17 @@
+---
+import { projectsData } from '../helpers/projects-data';
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section>
+  <div>
+    <h1>PROJECTS</h1>
+    {
+      projectsData.map(({ title, description, stack }) => {
+        return (
+          <ProjectCard title={title} description={description} stack={stack} />
+        );
+      })
+    }
+  </div>
+</section>
