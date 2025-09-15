@@ -4,3 +4,13 @@
     overflow-x: hidden;
     height: 100%;
 }
+
+span:has(.lyric-egg) .lyric-egg{
+    display: none;
+}
+
+span:has(.lyric-egg):hover .lyric-egg{
+    display: inline-block;
+    position: absolute;
+    transform: translateX(5%);
+}
