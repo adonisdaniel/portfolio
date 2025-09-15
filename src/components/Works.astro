@@ -7,9 +7,9 @@ import ProjectCard from './ProjectCard.astro';
   <div>
     <h1>PROJECTS</h1>
     {
-      projectsData.map(({ title, description, stack }) => {
+      projectsData.map(({ title, description, stack,preview }) => {
         return (
-          <ProjectCard title={title} description={description} stack={stack} />
+          <ProjectCard title={title} description={description} stack={stack} preview={preview} />
         );
       })
     }

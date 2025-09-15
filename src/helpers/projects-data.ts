@@ -6,6 +6,7 @@ export const projectsData: IProject[] = [
     description:
       'Back Office for the sprint gamings game suite. Here the games can be configured, client, operators, currencies. Also see reports and download them',
     stack: ['VUE 2', 'VUEX', 'AXIOS', 'SOCKET IO'],
+    preview: 'gika'
   },
   {
     title: 'SPRINT GAMING API',

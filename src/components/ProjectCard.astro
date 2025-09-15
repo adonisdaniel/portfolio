@@ -3,9 +3,10 @@ interface Props {
   title: string;
   description: string;
   stack: string[];
+  preview?:string
 }
 
-const { title, description, stack } = Astro.props;
+const { title, description, stack,preview } = Astro.props;
 ---
 
 <div>
@@ -14,4 +15,5 @@ const { title, description, stack } = Astro.props;
   <div>
     <p>STACK: {stack.map((el) => <span>{el}</span>)}</p>
   </div>
+  {preview && <a href={preview} target="_blank">PREVIEW</a>}
 </div>
