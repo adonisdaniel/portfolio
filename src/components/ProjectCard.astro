@@ -13,7 +13,7 @@ const { title, description, stack,preview } = Astro.props;
   <h2>{title}</h2>
   <p>{description}</p>
   <div>
-    <p>STACK: {stack.map((el) => <span>{el}</span>)}</p>
+    <p>STACK: {stack.map((el) => <span><strong>{el}</strong></span>)}</p>
   </div>
   {preview && <a href={preview} target="_blank">PREVIEW</a>}
 </div>
