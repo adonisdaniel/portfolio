@@ -255,19 +255,26 @@
 </style>
 
 <script>
-  const menuButton = document.querySelector(".button-menu");
-  const menuItems = document.querySelector(".menu-items-container");
-  const closeMenuButton = document.querySelector(
-    ".button-close-menu-container"
-  );
+  const menuButton = document.querySelector('.button-menu');
+  const menuItems = document.querySelector('.menu-items-container');
+  const closeMenuButton = document.querySelector('.button-close-menu-container');
+  const menuLinks = document.querySelectorAll('.menu-items a');
 
-  closeMenuButton?.addEventListener("click", () => {
-    menuButton?.classList.remove("hidden");
-    menuItems?.classList.remove("menu-items-container-show");
+  closeMenuButton?.addEventListener('click', () => {
+    menuButton?.classList.remove('hidden');
+    menuItems?.classList.remove('menu-items-container-show');
   });
 
-  menuButton?.addEventListener("click", () => {
-    menuButton.classList.add("hidden");
-    menuItems?.classList.add("menu-items-container-show");
+  menuButton?.addEventListener('click', () => {
+    menuButton.classList.add('hidden');
+    menuItems?.classList.add('menu-items-container-show');
+  });
+
+  // Cerrar menú al hacer click en un link
+  menuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menuButton?.classList.remove('hidden');
+      menuItems?.classList.remove('menu-items-container-show');
+    });
   });
 </script>
