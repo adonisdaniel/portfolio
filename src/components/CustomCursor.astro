@@ -1,0 +1,231 @@
+---
+// components/CustomCursor.astro
+---
+
+<div class="custom-cursor"></div>
+<div class="custom-cursor-outline"></div>
+
+<style is:global>
+  /* Cursor personalizado */
+  body {
+    cursor: none;
+  }
+
+  /* Ocultar el cursor default en todos los elementos interactivos */
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  .project-card,
+  .stack-tag {
+    cursor: none !important;
+  }
+
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.3s ease,
+      height 0.3s ease,
+      background-color 0.3s ease;
+    mix-blend-mode: difference;
+  }
+
+  .custom-cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.3s ease,
+      height 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 0.5;
+    mix-blend-mode: difference;
+  }
+
+  body.cursor-hover .custom-cursor {
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-primary);
+    opacity: 0.3;
+  }
+
+  body.cursor-hover .custom-cursor-outline {
+    width: 80px;
+    height: 80px;
+    opacity: 0.8;
+  }
+
+  body.cursor-click .custom-cursor {
+    width: 15px;
+    height: 15px;
+  }
+
+  body.cursor-click .custom-cursor-outline {
+    width: 35px;
+    height: 35px;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .custom-cursor,
+    .custom-cursor-outline {
+      display: none;
+    }
+
+    body {
+      cursor: auto;
+    }
+  }
+
+  input,
+  textarea,
+  select {
+    cursor: text !important;
+  }
+
+  button {
+    cursor: pointer !important;
+  }
+
+  .cursor-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    animation: particle-burst 0.6s ease-out forwards;
+    mix-blend-mode: difference;
+  }
+
+  @keyframes particle-burst {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(calc(-50% + var(--vx)), calc(-50% + var(--vy)))
+        scale(0);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      return;
+    }
+
+    const cursor: HTMLElement | null = document.querySelector(".custom-cursor");
+    const cursorOutline: HTMLElement | null = document.querySelector(
+      ".custom-cursor-outline"
+    );
+    const body = document.body;
+
+    if (!cursor || !cursorOutline) {
+      console.warn("Cursor elements not found");
+      return;
+    }
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    let outlineX = 0;
+    let outlineY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateCursor() {
+      cursorX += (mouseX - cursorX) * 0.3;
+      cursorY += (mouseY - cursorY) * 0.3;
+      outlineX += (mouseX - outlineX) * 0.15;
+      outlineY += (mouseY - outlineY) * 0.15;
+
+      if (cursor && cursorOutline) {
+        cursor.style.left = cursorX + "px";
+        cursor.style.top = cursorY + "px";
+        cursorOutline.style.left = outlineX + "px";
+        cursorOutline.style.top = outlineY + "px";
+      }
+
+      requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
+
+    const interactiveElements = document.querySelectorAll(
+      'a, button, .project-card, .stack-tag, [role="button"]'
+    );
+
+    interactiveElements.forEach((element) => {
+      element.addEventListener("mouseenter", () => {
+        body.classList.add("cursor-hover");
+      });
+
+      element.addEventListener("mouseleave", () => {
+        body.classList.remove("cursor-hover");
+      });
+    });
+
+    document.addEventListener("mousedown", () => {
+      body.classList.add("cursor-click");
+    });
+
+    document.addEventListener("mouseup", () => {
+      body.classList.remove("cursor-click");
+    });
+  });
+
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    // ... código anterior del cursor ...
+
+    // Partículas al hacer click
+    document.addEventListener("click", (e) => {
+      createParticles(e.clientX, e.clientY);
+    });
+
+    function createParticles(x: number, y: number) {
+      for (let i = 0; i < 6; i++) {
+        const particle = document.createElement("div");
+        particle.className = "cursor-particle";
+        particle.style.left = x + "px";
+        particle.style.top = y + "px";
+
+        const angle = (Math.PI * 2 * i) / 6;
+        const velocity = 50;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+
+        particle.style.setProperty("--vx", vx + "px");
+        particle.style.setProperty("--vy", vy + "px");
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 600);
+      }
+    }
+  }
+</script>

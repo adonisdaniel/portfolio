@@ -1,0 +1,39 @@
+---
+import { projectsData } from '../helpers/projects-data';
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section id="projects">
+  <div>
+    <h3>PROJECTS</h3>
+    <div class="projects-grid">
+    {
+      projectsData.map(({ title, description, stack,preview }) => {
+        return (
+          <ProjectCard title={title} description={description} stack={stack} preview={preview} />
+        );
+      })
+    }
+    </div>
+  </div>
+</section>
+
+<style>
+    .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (width >= 768px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (width >= 1024px) {
+    .projects-grid {
+      gap: 2.5rem;
+    }
+  }
+</style>
