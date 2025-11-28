@@ -1,24 +1,32 @@
 ---
 
+
 ---
 
 <div class="">
   <div class="top-bar">
-    <span>
+    <span class="brand">
       AM
-      <i class="lyric-egg">to the PM, PM to the AM, funk</i>
     </span>
     <div class="menu">
       <ul class="menu-items-container">
         <li class="menu-items"><a href="#projects" aria-label="projects">PROJECTS</a></li>
-        <li class="menu-items"><a href="#about" aria-label="about" >ABOUT ME</a></li>
-        <li class="menu-items"><a href="#about" aria-label="contact" >CONTACT</a></li>
-        <li class="menu-items button-close-menu">CLOSE MENU</li>
+        <li class="menu-items"><a href="#about" aria-label="about">ABOUT ME</a></li>
+        <li class="menu-items"><a href="#about" aria-label="contact">CONTACT</a></li>
+          <li class="menu-items button-close-menu-container">
+          <button class="button-close-menu" aria-label="close menu">
+            <span class="close-icon"></span>
+            <span class="close-icon"></span>
+          </button>
+        </li>
       </ul>
     </div>
-    <div class="button-menu-container">
-      <button class="button-menu">MENU</button>
-    </div>
+     <div class="button-menu-container">
+      <button class="button-menu" aria-label="open menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
   </div>
 </div>
 
@@ -26,41 +34,204 @@
   .top-bar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: #051923;
     position: relative;
+    z-index: 100;
   }
 
+  /* Marca "AM" */
+  .brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00A6FB;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .brand:hover {
+    color: #0582CA;
+  }
+
+  /* Menú móvil - Pantalla completa */
   .menu-items-container {
     margin: 0;
+    padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
-    position: absolute;
-    transform: translateX(100%);
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #003554;
+    transform: translateY(-100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 99;
+  }
+
+  .menu-items-container-show {
+    transform: translateY(0);
   }
 
   .menu-items {
     list-style: none;
   }
 
+  .menu-items a {
+    color: #00A6FB;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    display: block;
+    text-align: center;
+  }
+
+  .menu-items a:hover {
+    color: #0582CA;
+    transform: translateX(10px);
+  }
+
+  /* Botón hamburguesa */
+  .button-menu {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32px;
+    height: 32px;
+    position: relative;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: #00A6FB;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .button-menu:hover .hamburger-line {
+    background-color: #0582CA;
+  }
+
+  /* Contenedor del botón cerrar con texto */
+  .button-close-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  /* Botón cerrar (X) */
+  .button-close-menu {
+    background: rgba(0, 166, 251, 0.1);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 30px rgba(0, 166, 251, 0.5),
+                0 0 60px rgba(0, 166, 251, 0.3);
+  }
+
+  .close-icon {
+    position: absolute;
+    width: 50%;
+    height: 4px;
+    background-color: #00A6FB;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 166, 251, 0.8),
+                0 0 20px rgba(0, 166, 251, 0.6);
+  }
+
+  .close-icon:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .close-icon:nth-child(2) {
+    transform: rotate(-45deg);
+  }
+
+  /* Texto CLOSE MENU */
+  .close-text {
+    color: #00A6FB;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+  }
+
+  /* Hover effect */
+  .button-close-menu-container:hover .button-close-menu {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 0 40px rgba(0, 166, 251, 0.7),
+                0 0 80px rgba(0, 166, 251, 0.5);
+  }
+
+  .button-close-menu-container:hover .close-icon {
+    background-color: #0582CA;
+    box-shadow: 0 0 15px rgba(5, 130, 202, 1),
+                0 0 30px rgba(5, 130, 202, 0.8);
+  }
+
+  .button-close-menu-container:hover .close-text {
+    color: #0582CA;
+    transform: translateY(5px);
+  }
+
   .hidden {
     display: none;
   }
 
-  .menu-items-container-show {
-    transform: translateX(0);
-  }
-
+  /* Desktop */
   @media (width >= 450px) {
     .button-menu-container {
       display: none;
     }
-    .button-close-menu {
+    
+    .button-close-menu-container {
       display: none;
     }
 
     .menu-items-container {
       position: relative;
-      transform: translateX(0);
+      transform: translateY(0);
       flex-direction: row;
+      height: auto;
+      width: auto;
+      background-color: transparent;
+      padding: 0;
+      gap: 2.5rem;
+    }
+
+    .menu-items a {
+      font-size: 1rem;
+    }
+
+    .menu-items a:hover {
+      transform: translateX(0);
     }
   }
 </style>
@@ -68,7 +239,7 @@
 <script>
   const menuButton = document.querySelector('.button-menu');
   const menuItems = document.querySelector('.menu-items-container');
-  const closeMenuButton = document.querySelector('.button-close-menu');
+  const closeMenuButton = document.querySelector('.button-close-menu-container');
 
   closeMenuButton?.addEventListener('click', () => {
     menuButton?.classList.remove('hidden');
@@ -77,7 +248,6 @@
 
   menuButton?.addEventListener('click', () => {
     menuButton.classList.add('hidden');
-
     menuItems?.classList.add('menu-items-container-show');
   });
 </script>
