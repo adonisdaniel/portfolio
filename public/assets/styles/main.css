@@ -1,16 +1,102 @@
-.container{
-    max-width: 1000px;
-    margin: 0 auto;
-    overflow-x: hidden;
-    height: 100%;
+:root {
+  /* Fuentes */
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  /* Paleta de colores principal */
+  --color-primary: #00a6fb;
+  --color-primary-dark: #0582ca;
+  --color-primary-darker: #006494;
+  --color-secondary: #003554;
+  --color-background: #051923;
+
+  /* Alias semánticos para mejor contexto */
+  --color-brand: var(--color-primary);
+  --color-brand-hover: var(--color-primary-dark);
+  --color-accent: var(--color-primary);
+  --color-text-light: var(--color-primary);
+  --color-bg-dark: var(--color-background);
+  --color-bg-medium: var(--color-secondary);
+  --color-bg-gradient: var(--color-primary-darker);
+
+   /* Max width del contenedor */
+  --max-width: 1200px;
+  --max-width-narrow: 900px; /* Para textos/blogs */
+  --padding-inline: 2rem; /* Padding lateral en móvil */
+
+    /* Paleta de colores de texto */
+  --text-heading: #FFFFFF;        /* Títulos principales - blanco puro */
+  --text-subheading: #00A6FB;     /* Subtítulos - azul primario para contraste */
+  --text-body: #E0E0E0;           /* Texto normal - gris claro, más suave que blanco */
+  --text-muted: #A0A0A0;          /* Texto secundario - gris medio */
+  --text-accent: #0582CA;         /* Enlaces y destacados - azul medio */
 }
 
-span:has(.lyric-egg) .lyric-egg{
-    display: none;
+/* Contenedor global */
+.container {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--padding-inline);
+  width: 100%;
+
+   box-sizing: border-box;
 }
 
-span:has(.lyric-egg):hover .lyric-egg{
-    display: inline-block;
-    position: absolute;
-    transform: translateX(5%);
+/* Contenedor estrecho (opcional para secciones de texto) */
+.container-narrow {
+  max-width: var(--max-width-narrow);
+  margin-inline: auto;
+  padding-inline: var(--padding-inline);
+  width: 100%;
+}
+
+/* Títulos principales de secciones */
+h1, h2 {
+  color: var(--text-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 2.5vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  margin-bottom: 1.5rem;
+}
+
+/* Subtítulos */
+h3 {
+  color: var(--text-subheading); /* Azul para diferenciación */
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Texto del cuerpo */
+p, li {
+  color: var(--text-body); /* Gris claro, menos intenso que blanco */
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.7; /* Mayor espacio para mejor legibilidad */
+  font-weight: 400;
+}
+
+/* Texto secundario (fechas, descripciones cortas) */
+.text-muted, small {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Enlaces */
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
 }
