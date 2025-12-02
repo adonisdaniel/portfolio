@@ -1,11 +1,13 @@
 ---
+import Logo from "./Logo.astro";
+
 
 ---
 
 <div class="topbar-wrapper">
   <div class="container">
     <div class="top-bar">
-      <span class="brand"> AM </span>
+      <Logo/>
       <div class="menu">
         <ul class="menu-items-container">
           <li class="menu-items">
@@ -45,6 +47,12 @@
     z-index: 100;
     width: 100%;
     border-bottom: 1px solid rgba(0, 166, 251, 0.1); /* sutil separación */
+  }
+
+  .topbar-wrapper.scrolled {
+    background-color: rgba(5, 25, 35, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 166, 251, 0.1);
   }
   .top-bar {
     display: flex;

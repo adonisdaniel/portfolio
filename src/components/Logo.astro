@@ -1,0 +1,65 @@
+---
+// components/Logo.astro
+---
+
+<div class="logo-container">
+  <!-- Estado normal -->
+  <svg class="logo-normal" width="80" height="40" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="28" font-family="'Courier New', monospace" font-size="24" font-weight="700" fill="var(--color-primary)">
+      &lt;AM/&gt;
+    </text>
+  </svg>
+  
+  <!-- Estado comentado (scroll) -->
+  <svg class="logo-commented" width="100" height="40" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <text x="10" y="28" font-family="'Courier New', monospace" font-size="24" font-weight="600" fill="#666">
+      // &lt;AM/&gt;
+    </text>
+  </svg>
+</div>
+
+<style is:global>
+  .logo-container {
+    position: relative;
+    width: 160px;
+    height: 40px;
+  }
+
+  .logo-normal,
+  .logo-commented {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    width: 100%;
+  }
+
+  .logo-normal {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .logo-commented {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+  }
+
+  /* Estado cuando se hace scroll */
+  .scrolled .logo-normal {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .scrolled .logo-commented {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  /* Efecto hover */
+  .logo-container:hover .logo-normal text,
+  .logo-container:hover .logo-commented text {
+    fill: var(--color-primary-dark);
+  }
+</style>

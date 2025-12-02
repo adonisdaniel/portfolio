@@ -8,6 +8,11 @@
     <title>ADONIS MENDOZA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/svg+xml" href="/portfolio/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/portfolio/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/portfolio/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/portfolio/apple-touch-icon.png" />
+    <link rel="manifest" href="/portfolio/site.webmanifest" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
@@ -16,15 +21,42 @@
   </head>
   <body>
     <slot />
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoContainer: HTMLElement | null =
+          document.querySelector(".logo-container");
+        const topbarWrapper: HTMLElement | null =
+          document.querySelector(".topbar-wrapper");
+
+        if (logoContainer) {
+          function handleScroll() {
+            const scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > 50) {
+              logoContainer?.classList.add("scrolled");
+              topbarWrapper?.classList.add("scrolled");
+            } else {
+              logoContainer?.classList.remove("scrolled");
+              topbarWrapper?.classList.remove("scrolled");
+            }
+          }
+
+          handleScroll();
+          window.addEventListener("scroll", handleScroll, { passive: true });
+        }
+      });
+    </script>
   </body>
 </html>
 
 <style>
+  html {
+    overflow-x: clip;
+  }
   html,
   body {
     height: 100%;
-
-    overflow-x: hidden;
     max-width: 100vw;
 
     margin: 0;
