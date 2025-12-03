@@ -3,6 +3,7 @@
 ---
 
 <section class="jumbotron" id="home">
+  <canvas class="sky-canvas"></canvas>
   <div class="container">
     <div class="jumbotron-content">
       <h1 class="jumbotron-title">
@@ -30,29 +31,21 @@
     padding: 5rem 2rem;
     position: relative;
     overflow: hidden;
-    transition: background 0.8s ease;
   }
 
-  /* Estados según hora del día */
-  .jumbotron.morning {
-    background: linear-gradient(135deg, #0582CA 0%, #00A6FB 100%);
-  }
-
-  .jumbotron.afternoon {
-    background: linear-gradient(135deg, #006494 0%, #0582CA 100%);
-  }
-
-  .jumbotron.evening {
-    background: linear-gradient(135deg, #003554 0%, #006494 100%);
-  }
-
-  .jumbotron.night {
-    background: linear-gradient(135deg, #051923 0%, #003554 100%);
+  /* Canvas de Three.js */
+  .sky-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
   }
 
   /* Efecto de partículas/estrellas */
   .jumbotron::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -68,6 +61,8 @@
     animation: stars 20s linear infinite;
     opacity: 0;
     transition: opacity 0.8s ease;
+    z-index: 1;
+    pointer-events: none;
   }
 
   .jumbotron.night::before,
@@ -86,14 +81,14 @@
 
   .jumbotron-content {
     text-align: center;
-    z-index: 1;
+    z-index: 2;
     position: relative;
   }
 
   .jumbotron-title {
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     margin-bottom: 1rem;
     line-height: 1.2;
     display: flex;
@@ -169,62 +164,303 @@
     }
   }
 </style>
-
 <script>
+  import * as THREE from "three";
+
+  let currentPeriod = "";
+  let sun: THREE.Mesh, moon: THREE.Mesh, clouds: THREE.Mesh[];
+  let skyGradient: THREE.Mesh;
+  let scene: THREE.Scene,
+    camera: THREE.PerspectiveCamera,
+    renderer: THREE.WebGLRenderer;
+
+  // Colores para los gradientes según periodo del día
+  const skyColors = {
+    morning: {
+      top: new THREE.Color(0x0582ca),
+      bottom: new THREE.Color(0x00a6fb)
+    },
+    afternoon: {
+      top: new THREE.Color(0x006494),
+      bottom: new THREE.Color(0x0582ca)
+    },
+    evening: {
+      top: new THREE.Color(0x003554),
+      bottom: new THREE.Color(0x006494)
+    },
+    night: {
+      top: new THREE.Color(0x051923),
+      bottom: new THREE.Color(0x003554)
+    }
+  };
+
   function updateJumbotronByTime() {
-    const jumbotron = document.querySelector('.jumbotron');
-    const timeText = document.querySelector('.time-text');
-    const greeting = document.querySelector('.greeting');
-    
+    const jumbotron = document.querySelector(".jumbotron");
+    const timeText = document.querySelector(".time-text");
+    const greeting = document.querySelector(".greeting");
+
     if (!jumbotron || !timeText || !greeting) return;
 
-    // Obtener hora local del visitante
     const now = new Date();
     const hour = now.getHours();
-    const timeString = now.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: true 
+    const timeString = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
-    
-    // Obtener zona horaria
+
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    
-    // Remover todas las clases de tiempo
-    jumbotron.classList.remove('morning', 'afternoon', 'evening', 'night');
-    
-    // Determinar periodo del día y aplicar clase
-    let period = '';
-    let greetingText = '';
-    
+
+    jumbotron.classList.remove("morning", "afternoon", "evening", "night");
+
+    let period = "";
+    let greetingText = "";
+
     if (hour >= 5 && hour < 12) {
-      period = 'morning';
-      greetingText = 'Good Morning';
-      jumbotron.classList.add('morning');
+      period = "morning";
+      greetingText = "Good Morning";
+      jumbotron.classList.add("morning");
     } else if (hour >= 12 && hour < 17) {
-      period = 'afternoon';
-      greetingText = 'Good Afternoon';
-      jumbotron.classList.add('afternoon');
+      period = "afternoon";
+      greetingText = "Good Afternoon";
+      jumbotron.classList.add("afternoon");
     } else if (hour >= 17 && hour < 21) {
-      period = 'evening';
-      greetingText = 'Good Evening';
-      jumbotron.classList.add('evening');
+      period = "evening";
+      greetingText = "Good Evening";
+      jumbotron.classList.add("evening");
     } else {
-      period = 'night';
-      greetingText = 'Good Night';
-      jumbotron.classList.add('night');
+      period = "night";
+      greetingText = "Good Night";
+      jumbotron.classList.add("night");
     }
-    
-    // Actualizar textos
+
     greeting.textContent = greetingText;
     timeText.textContent = `${timeString} • ${timeZone}`;
-    
-    console.log(`Visitor time: ${timeString}, Period: ${period}, TimeZone: ${timeZone}`);
+
+    // Actualizar escena 3D según periodo
+    if (period !== currentPeriod) {
+      currentPeriod = period;
+      updateSkyObjects(period);
+    }
   }
 
-  // Ejecutar al cargar
-  document.addEventListener('DOMContentLoaded', updateJumbotronByTime);
-  
+  function updateSkyObjects(period: string) {
+    if (!sun || !moon || !skyGradient) return;
+
+    const sunMat = sun.material as THREE.MeshBasicMaterial;
+    const moonMat = moon.material as THREE.MeshBasicMaterial;
+
+    // Actualizar gradiente del cielo
+    updateSkyGradient(period);
+
+    // Posiciones y visibilidad según periodo del día
+    switch (period) {
+      case "morning":
+        sun.position.set(-3, 2, -5);
+        sunMat.opacity = 1;
+        moonMat.opacity = 0;
+        break;
+      case "afternoon":
+        sun.position.set(0, 3, -5);
+        sunMat.opacity = 1;
+        moonMat.opacity = 0;
+        break;
+      case "evening":
+        sun.position.set(3, 1, -5);
+        sunMat.opacity = 0.6;
+        moon.position.set(-3, 2, -5);
+        moonMat.opacity = 0.4;
+        break;
+      case "night":
+        sunMat.opacity = 0;
+        moon.position.set(0, 3, -5);
+        moonMat.opacity = 1;
+        break;
+    }
+  }
+
+  function createSkyGradient(topColor: THREE.Color, bottomColor: THREE.Color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2;
+    canvas.height = 256;
+    
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+
+    const gradient = context.createLinearGradient(0, 0, 0, 256);
+    gradient.addColorStop(0, `#${topColor.getHexString()}`);
+    gradient.addColorStop(1, `#${bottomColor.getHexString()}`);
+    
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 2, 256);
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  function updateSkyGradient(period: string) {
+    if (!skyGradient) return;
+
+    const colors = skyColors[period as keyof typeof skyColors];
+    const texture = createSkyGradient(colors.top, colors.bottom);
+    
+    if (texture) {
+      const material = skyGradient.material as THREE.MeshBasicMaterial;
+      material.map = texture;
+      material.needsUpdate = true;
+    }
+  }
+
+  function updateSkyGradientSize() {
+    if (!skyGradient || !camera) return;
+
+    // Calcular el tamaño visible en la posición del plano
+    const distance = Math.abs(camera.position.z - skyGradient.position.z);
+    const vFov = THREE.MathUtils.degToRad(camera.fov);
+    const height = 2 * Math.tan(vFov / 2) * distance;
+    const width = height * camera.aspect;
+
+    // Actualizar escala del plano para cubrir toda la pantalla
+    skyGradient.scale.set(width, height, 1);
+  }
+
+  function initThreeJS() {
+    const canvas = document.querySelector(".sky-canvas");
+    if (!canvas) return;
+
+    // Escena
+    scene = new THREE.Scene();
+
+    // Cámara
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
+    camera.position.z = 5;
+
+    // Renderer
+    renderer = new THREE.WebGLRenderer({
+      canvas: canvas as HTMLCanvasElement,
+      alpha: false,
+      antialias: true,
+    });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(window.devicePixelRatio);
+
+    // Fondo con gradiente (plano que cubre toda la pantalla)
+    const skyGeometry = new THREE.PlaneGeometry(1, 1); // Tamaño inicial 1x1
+    const initialTexture = createSkyGradient(
+      skyColors.morning.top,
+      skyColors.morning.bottom
+    );
+    const skyMaterial = new THREE.MeshBasicMaterial({
+      map: initialTexture,
+      side: THREE.DoubleSide
+    });
+    skyGradient = new THREE.Mesh(skyGeometry, skyMaterial);
+    skyGradient.position.z = -10;
+    scene.add(skyGradient);
+
+    // Actualizar tamaño del gradiente
+    updateSkyGradientSize();
+
+    // Sol
+    const sunGeometry = new THREE.CircleGeometry(1.2, 32);
+    const sunMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffef24,
+      transparent: true,
+      opacity: 1,
+    });
+    sun = new THREE.Mesh(sunGeometry, sunMaterial);
+    sun.position.set(-3, 2, -5);
+    scene.add(sun);
+
+    // Resplandor del sol
+    const glowGeometry = new THREE.CircleGeometry(1.5, 32);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffa500,
+      transparent: true,
+      opacity: 0.3,
+    });
+    const sunGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+    sun.add(sunGlow);
+
+    // Luna
+    const moonGeometry = new THREE.CircleGeometry(0.8, 32);
+    const moonMaterial = new THREE.MeshBasicMaterial({
+      color: 0xe0e0e0,
+      transparent: true,
+      opacity: 0,
+    });
+    moon = new THREE.Mesh(moonGeometry, moonMaterial);
+    moon.position.set(0, 3, -5);
+    scene.add(moon);
+
+    // Nubes
+    clouds = [];
+    for (let i = 0; i < 5; i++) {
+      const cloudGeometry = new THREE.PlaneGeometry(2, 0.5);
+      const cloudMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.2,
+      });
+      const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      cloud.position.set(
+        Math.random() * 10 - 5,
+        Math.random() * 4 - 1,
+        -8 + Math.random() * 2
+      );
+      clouds.push(cloud);
+      scene.add(cloud);
+    }
+
+    // Inicializar periodo
+    updateJumbotronByTime();
+
+    // Animación
+    animate();
+
+    // Responsive
+    window.addEventListener("resize", onWindowResize);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotar sol ligeramente
+    if (sun) {
+      sun.rotation.z += 0.001;
+    }
+
+    // Mover nubes
+    clouds.forEach((cloud, i) => {
+      cloud.position.x += 0.002 * (i + 1);
+      if (cloud.position.x > 6) {
+        cloud.position.x = -6;
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  function onWindowResize() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    
+    // Actualizar tamaño del gradiente cuando cambia el viewport
+    updateSkyGradientSize();
+  }
+
+  // Inicializar
+  document.addEventListener("DOMContentLoaded", () => {
+    initThreeJS();
+    updateJumbotronByTime();
+  });
+
   // Actualizar cada minuto
   setInterval(updateJumbotronByTime, 60000);
 </script>
+
