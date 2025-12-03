@@ -1,0 +1,230 @@
+---
+// components/Jumbotron.astro
+---
+
+<section class="jumbotron" id="home">
+  <div class="container">
+    <div class="jumbotron-content">
+      <h1 class="jumbotron-title">
+        <span class="greeting">Hello</span>
+        <span class="name">I'm <strong>Adonis Mendoza</strong></span>
+      </h1>
+      <p class="jumbotron-subtitle">Full Stack Developer</p>
+      <p class="jumbotron-description">
+        Specializing in modern Web development JavaScript ecosystems
+      </p>
+      <div class="time-zone-info">
+        <span class="icon">🌍</span>
+        <span class="time-text"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .jumbotron {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.8s ease;
+  }
+
+  /* Estados según hora del día */
+  .jumbotron.morning {
+    background: linear-gradient(135deg, #0582CA 0%, #00A6FB 100%);
+  }
+
+  .jumbotron.afternoon {
+    background: linear-gradient(135deg, #006494 0%, #0582CA 100%);
+  }
+
+  .jumbotron.evening {
+    background: linear-gradient(135deg, #003554 0%, #006494 100%);
+  }
+
+  .jumbotron.night {
+    background: linear-gradient(135deg, #051923 0%, #003554 100%);
+  }
+
+  /* Efecto de partículas/estrellas */
+  .jumbotron::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent);
+    background-size: 200% 200%;
+    animation: stars 20s linear infinite;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .jumbotron.night::before,
+  .jumbotron.evening::before {
+    opacity: 0.3;
+  }
+
+  @keyframes stars {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+
+  .jumbotron-content {
+    text-align: center;
+    z-index: 1;
+    position: relative;
+  }
+
+  .jumbotron-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .greeting {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 400;
+    opacity: 0.9;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+
+  .name {
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .jumbotron-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    animation: fadeInUp 0.8s ease 0.6s both;
+  }
+
+  .jumbotron-description {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+    animation: fadeInUp 0.8s ease 0.8s both;
+  }
+
+  .time-zone-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeInUp 0.8s ease 1s both;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+
+  .time-text {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (width <= 768px) {
+    .jumbotron {
+      min-height: 80vh;
+      padding: 3rem 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  function updateJumbotronByTime() {
+    const jumbotron = document.querySelector('.jumbotron');
+    const timeText = document.querySelector('.time-text');
+    const greeting = document.querySelector('.greeting');
+    
+    if (!jumbotron || !timeText || !greeting) return;
+
+    // Obtener hora local del visitante
+    const now = new Date();
+    const hour = now.getHours();
+    const timeString = now.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    
+    // Obtener zona horaria
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    // Remover todas las clases de tiempo
+    jumbotron.classList.remove('morning', 'afternoon', 'evening', 'night');
+    
+    // Determinar periodo del día y aplicar clase
+    let period = '';
+    let greetingText = '';
+    
+    if (hour >= 5 && hour < 12) {
+      period = 'morning';
+      greetingText = 'Good Morning';
+      jumbotron.classList.add('morning');
+    } else if (hour >= 12 && hour < 17) {
+      period = 'afternoon';
+      greetingText = 'Good Afternoon';
+      jumbotron.classList.add('afternoon');
+    } else if (hour >= 17 && hour < 21) {
+      period = 'evening';
+      greetingText = 'Good Evening';
+      jumbotron.classList.add('evening');
+    } else {
+      period = 'night';
+      greetingText = 'Good Night';
+      jumbotron.classList.add('night');
+    }
+    
+    // Actualizar textos
+    greeting.textContent = greetingText;
+    timeText.textContent = `${timeString} • ${timeZone}`;
+    
+    console.log(`Visitor time: ${timeString}, Period: ${period}, TimeZone: ${timeZone}`);
+  }
+
+  // Ejecutar al cargar
+  document.addEventListener('DOMContentLoaded', updateJumbotronByTime);
+  
+  // Actualizar cada minuto
+  setInterval(updateJumbotronByTime, 60000);
+</script>
