@@ -30,6 +30,11 @@ export const projectsData: IProject[] = [
     preview: "https://adminroulet.kingconnections.net/",
   },
   {
+    title: 'SPRINT GAMING - AWARD ADMIN',
+    description: 'Frontend for the sprint gamings game suite. Here crupiers can close rounds sending the results to the backend.',
+    stack: ['SVELTE','AXIOS'],
+  },
+  {
     title: "SPRINT GAMING API",
     description:
       "Here I worked creating queries to mongo db, recieving data from another project in c# that send us rounds for a game. The project in builded with Hexagonal Architecture, or DDD.",
