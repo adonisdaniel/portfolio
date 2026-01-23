@@ -30,7 +30,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: var(--color-primary);
+    background-color: var(--cursor-color);
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
@@ -47,7 +47,7 @@
     left: 0;
     width: 40px;
     height: 40px;
-    border: 2px solid var(--color-primary);
+    border: 2px solid var(--cursor-color);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
@@ -56,14 +56,14 @@
       width 0.3s ease,
       height 0.3s ease,
       opacity 0.3s ease;
-    opacity: 0.5;
-    mix-blend-mode: difference;
+    /* opacity: 0.5; */
+    mix-blend-mode: lighten;
   }
 
   body.cursor-hover .custom-cursor {
     width: 60px;
     height: 60px;
-    background-color: var(--color-primary);
+    background-color: var(--cursor-color);
     opacity: 0.3;
   }
 
@@ -108,7 +108,7 @@
     position: fixed;
     width: 4px;
     height: 4px;
-    background: var(--color-primary);
+    background: var(--cursor-color);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9997;
@@ -200,7 +200,6 @@
   });
 
   if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    // ... código anterior del cursor ...
 
     // Partículas al hacer click
     document.addEventListener("click", (e) => {

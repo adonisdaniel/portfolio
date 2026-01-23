@@ -30,6 +30,8 @@
   --text-body: #E0E0E0;           /* Texto normal - gris claro, más suave que blanco */
   --text-muted: #A0A0A0;          /* Texto secundario - gris medio */
   --text-accent: #0582CA;         /* Enlaces y destacados - azul medio */
+
+  --cursor-color: #f7629a;
 }
 
 /* Contenedor global */
@@ -78,7 +80,7 @@ h3 {
 /* Texto del cuerpo */
 p, li {
   color: var(--text-body); /* Gris claro, menos intenso que blanco */
-  font-size: clamp(1rem, 2vw, 1.125rem);
+  font-size: clamp(.6rem, 1.6vw, 1rem);
   line-height: 1.7; /* Mayor espacio para mejor legibilidad */
   font-weight: 400;
 }
