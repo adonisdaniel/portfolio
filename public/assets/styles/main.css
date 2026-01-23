@@ -30,6 +30,8 @@
   --text-body: #E0E0E0;           /* Texto normal - gris claro, más suave que blanco */
   --text-muted: #A0A0A0;          /* Texto secundario - gris medio */
   --text-accent: #0582CA;         /* Enlaces y destacados - azul medio */
+
+  --cursor-color: #f7629a;
 }
 
 /* Contenedor global */

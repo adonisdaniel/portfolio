@@ -1,21 +1,47 @@
 ---
-
+import GitHub from "./icons/GitHub.astro";
+import Linkedin from "./icons/Linkedin.astro";
+import Instagram from "./icons/Instagram.astro";
 ---
 
 <section class="footer">
-<footer class="site-footer" aria-label="Footer personal">
+  <footer class="site-footer" aria-label="Footer personal">
     <div class="footer-inner">
       <div class="footer-block">
         <h3>Out of Office</h3>
-        <p>In my free time I enjoy training, reading about technology and working on personal projects.</p>
+        <p>
+          In my free time I enjoy training, reading about technology and working
+          on personal projects.
+        </p>
       </div>
 
       <div class="footer-block">
         <h3>Social Media</h3>
-        <p>
-          <a href="https://github.com/adonisdaniel" target="_blank" rel="noopener noreferrer">GitHub</a><br>
-          <a href="https://www.linkedin.com/in/adonis-mendoza-4a7696197/" target="_blank" rel="noopener noreferrer">LinkedIn</a><br>
-          <a href="https://www.instagram.com/thefororomachine/" target="_blank" rel="noopener noreferrer">Instagram</a><br>
+        <p class="social-media-icons">
+          <GitHub />
+          <a
+            href="https://github.com/adonisdaniel"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-media-icons-link">GitHub</a
+          >
+        </p>
+        <p class="social-media-icons">
+          <Linkedin />
+          <a
+            href="https://www.linkedin.com/in/adonis-mendoza-4a7696197/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-media-icons-link">LinkedIn</a
+          >
+        </p>
+        <p class="social-media-icons">
+          <Instagram /><a
+            href="https://www.instagram.com/thefororomachine/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-media-icons-link">Instagram</a
+          >
         </p>
       </div>
 
@@ -27,68 +53,75 @@
 </section>
 
 <style>
+  .site-footer {
+    background: #031018;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 2.5rem 1.5rem;
+    color: #d6e7f6;
+    font-size: 0.95rem;
+    height: 30dvh;
+    margin-top: 4rem;
+  }
 
-.site-footer {
-  background: #031018;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 2.5rem 1.5rem;
-  color: #d6e7f6;
-  font-size: 0.95rem;
-  height: 30dvh;
-  margin-top: 4rem;
-}
-
-.footer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  height: 100%;
-}
-
-.footer-block h3 {
-  margin: 0 0 0.6rem;
-  font-size: 1.05rem;
-  color: #39a2f7;
-}
-
-.footer-block p {
-  margin: 0;
-  line-height: 1.6;
-}
-
-.site-footer a {
-  color: #39a2f7;
-  text-decoration: none;
-}
-
-.site-footer a:hover {
-  text-decoration: underline;
-}
-
-.footer-copy {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 1rem;
-  font-size: 0.65rem;
-  opacity: 0.85;
-
-  align-self: flex-end;
-  text-align: center;
-}
-
-/* responsive */
-@media (min-width: 768px) {
   .footer-inner {
-    grid-template-columns: 2fr 1.2fr;
-    align-items: flex-start;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    height: 100%;
+  }
+
+  .footer-block h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.05rem;
+    color: #39a2f7;
+  }
+
+  .footer-block p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .site-footer a {
+    color: #39a2f7;
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    text-decoration: underline;
   }
 
   .footer-copy {
-    grid-column: 1 / -1;
-    /* text-align: right; */
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1rem;
+    font-size: 0.65rem;
+    opacity: 0.85;
+
+    align-self: flex-end;
+    text-align: center;
   }
-}
 
+  .social-media-icons {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+  }
 
+  .social-media-icons-link {
+    margin-left: 0.5rem;
+  }
+
+  /* responsive */
+  @media (min-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 2fr 1.2fr;
+      align-items: flex-start;
+    }
+
+    .footer-copy {
+      grid-column: 1 / -1;
+      /* text-align: right; */
+    }
+  }
 </style>
