@@ -18,7 +18,7 @@ import Earth from "./icons/Earth.astro";
       </p>
       <div class="time-zone-info">
         <span class="icon">
-          <Earth/>
+          <Earth />
         </span>
         <span class="time-text"></span>
       </div>
@@ -55,7 +55,7 @@ import Earth from "./icons/Earth.astro";
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
       radial-gradient(2px 2px at 20% 30%, white, transparent),
       radial-gradient(2px 2px at 60% 70%, white, transparent),
       radial-gradient(1px 1px at 50% 50%, white, transparent),
@@ -172,7 +172,7 @@ import Earth from "./icons/Earth.astro";
   import * as THREE from "three";
 
   let currentPeriod = "";
-  let sun: THREE.Mesh, moon: THREE.Mesh, clouds: THREE.Mesh[];
+  let sun: THREE.Mesh, moon: THREE.Mesh, clouds: THREE.Group[];
   let skyGradient: THREE.Mesh;
   let scene: THREE.Scene,
     camera: THREE.PerspectiveCamera,
@@ -182,20 +182,20 @@ import Earth from "./icons/Earth.astro";
   const skyColors = {
     morning: {
       top: new THREE.Color(0x0582ca),
-      bottom: new THREE.Color(0x00a6fb)
+      bottom: new THREE.Color(0x00a6fb),
     },
     afternoon: {
       top: new THREE.Color(0x006494),
-      bottom: new THREE.Color(0x0582ca)
+      bottom: new THREE.Color(0x0582ca),
     },
     evening: {
       top: new THREE.Color(0x003554),
-      bottom: new THREE.Color(0x006494)
+      bottom: new THREE.Color(0x006494),
     },
     night: {
       top: new THREE.Color(0x051923),
-      bottom: new THREE.Color(0x003554)
-    }
+      bottom: new THREE.Color(0x003554),
+    },
   };
 
   function updateJumbotronByTime() {
@@ -257,6 +257,9 @@ import Earth from "./icons/Earth.astro";
     // Actualizar gradiente del cielo
     updateSkyGradient(period);
 
+    // Apariencia de las nubes según el periodo
+    applyCloudsPeriod(period);
+
     // Posiciones y visibilidad según periodo del día
     switch (period) {
       case "morning":
@@ -284,17 +287,17 @@ import Earth from "./icons/Earth.astro";
   }
 
   function createSkyGradient(topColor: THREE.Color, bottomColor: THREE.Color) {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = 2;
     canvas.height = 256;
-    
-    const context = canvas.getContext('2d');
+
+    const context = canvas.getContext("2d");
     if (!context) return null;
 
     const gradient = context.createLinearGradient(0, 0, 0, 256);
     gradient.addColorStop(0, `#${topColor.getHexString()}`);
     gradient.addColorStop(1, `#${bottomColor.getHexString()}`);
-    
+
     context.fillStyle = gradient;
     context.fillRect(0, 0, 2, 256);
 
@@ -306,7 +309,7 @@ import Earth from "./icons/Earth.astro";
 
     const colors = skyColors[period as keyof typeof skyColors];
     const texture = createSkyGradient(colors.top, colors.bottom);
-    
+
     if (texture) {
       const material = skyGradient.material as THREE.MeshBasicMaterial;
       material.map = texture;
@@ -325,6 +328,87 @@ import Earth from "./icons/Earth.astro";
 
     // Actualizar escala del plano para cubrir toda la pantalla
     skyGradient.scale.set(width, height, 1);
+  }
+
+  // RNG determinista para que la silueta de cada nube sea estable
+  function mulberry32(seed: number) {
+    let t = seed >>> 0;
+    return function () {
+      t = (t + 0x6d2b79f5) >>> 0;
+      let r = t;
+      r = Math.imul(r ^ (r >>> 15), r | 1);
+      r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Configuración base de la nube (la que "va bien")
+  const NUBE_BASE_CONFIG = [
+    { r: 0.4, x: 0, y: 0.2, z: 0 },
+    { r: 0.35, x: -0.35, y: 0.1, z: 0 },
+    { r: 0.45, x: 0.3, y: 0.05, z: 0.1 },
+    { r: 0.25, x: 0.6, y: -0.1, z: 0 },
+    { r: 0.3, x: -0.1, y: -0.1, z: 0.2 },
+  ];
+
+  const NUBE_JITTER = 0.15;
+
+  function createToonCloud(seed: number, baseScale: number): THREE.Group {
+    const rng = mulberry32(seed);
+    const group = new THREE.Group();
+
+    const config = NUBE_BASE_CONFIG.map((c) => ({
+      r: c.r * (1 + (rng() - 0.5) * 2 * NUBE_JITTER),
+      x: c.x * (1 + (rng() - 0.5) * 2 * NUBE_JITTER),
+      y: c.y * (1 + (rng() - 0.5) * 2 * NUBE_JITTER),
+      z: c.z,
+    }));
+
+    const material = new THREE.MeshToonMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 1,
+    });
+    const outlineMaterial = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      side: THREE.BackSide,
+    });
+
+    config.forEach((c) => {
+      const geom = new THREE.SphereGeometry(c.r, 32, 32);
+      const mesh = new THREE.Mesh(geom, material);
+      mesh.position.set(c.x, c.y, c.z);
+
+      const outline = new THREE.Mesh(geom, outlineMaterial);
+      outline.scale.multiplyScalar(1.04);
+      mesh.add(outline);
+
+      group.add(mesh);
+    });
+
+    group.scale.setScalar(baseScale);
+    return group;
+  }
+
+  // Apariencia de las nubes según el periodo del día
+  const cloudSettings: Record<string, { opacity: number; color: number }> = {
+    morning: { opacity: 1, color: 0xffffff },
+    afternoon: { opacity: 1, color: 0xffffff },
+    evening: { opacity: 1, color: 0xffebd6 },
+    night: { opacity: 1, color: 0x949daf },
+  };
+
+  function applyCloudsPeriod(period: string) {
+    if (!clouds) return;
+    const cfg = cloudSettings[period];
+    if (!cfg) return;
+    clouds.forEach((cloud) => {
+      const mat = cloud.userData.material as THREE.MeshToonMaterial | undefined;
+      if (!mat) return;
+      mat.opacity = cfg.opacity;
+      mat.color.setHex(cfg.color);
+      mat.needsUpdate = true;
+    });
   }
 
   function initThreeJS() {
@@ -353,11 +437,11 @@ import Earth from "./icons/Earth.astro";
     const skyGeometry = new THREE.PlaneGeometry(1, 1); // Tamaño inicial 1x1
     const initialTexture = createSkyGradient(
       skyColors.morning.top,
-      skyColors.morning.bottom
+      skyColors.morning.bottom,
     );
     const skyMaterial = new THREE.MeshBasicMaterial({
       map: initialTexture,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
     });
     skyGradient = new THREE.Mesh(skyGeometry, skyMaterial);
     skyGradient.position.z = -10;
@@ -380,7 +464,7 @@ import Earth from "./icons/Earth.astro";
     // Resplandor del sol
     const glowGeometry = new THREE.CircleGeometry(1.5, 32);
     const glowMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffa500,
+      color: 0xfde1ae,
       transparent: true,
       opacity: 0.3,
     });
@@ -398,21 +482,32 @@ import Earth from "./icons/Earth.astro";
     moon.position.set(0, 3, -5);
     scene.add(moon);
 
-    // Nubes
+    // Luces (necesarias para MeshToonMaterial)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(20, 40, 20);
+    scene.add(dirLight);
+
+    // Nubes toon
     clouds = [];
-    for (let i = 0; i < 5; i++) {
-      const cloudGeometry = new THREE.PlaneGeometry(2, 0.5);
-      const cloudMaterial = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.2,
-      });
-      const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+    const NUM_CLOUDS = 7;
+    for (let i = 0; i < NUM_CLOUDS; i++) {
+      const baseScale = 0.6 + Math.random() * 1.0;
+      const cloud = createToonCloud(i + 1, baseScale);
       cloud.position.set(
-        Math.random() * 10 - 5,
-        Math.random() * 4 - 1,
-        -8 + Math.random() * 2
+        Math.random() * 14 - 7,
+        Math.random() * 4 - 1.5,
+        -8 + Math.random() * 2,
       );
+      cloud.userData.vx = 0.002 + Math.random() * 0.004;
+      cloud.userData.baseY = cloud.position.y;
+      cloud.userData.baseScale = baseScale;
+      cloud.userData.phase = Math.random() * Math.PI * 2;
+      cloud.userData.material = (
+        cloud.children[0] as THREE.Mesh
+      ).material as THREE.MeshToonMaterial;
       clouds.push(cloud);
       scene.add(cloud);
     }
@@ -427,21 +522,33 @@ import Earth from "./icons/Earth.astro";
     window.addEventListener("resize", onWindowResize);
   }
 
+  let tiempo = 0;
+
   function animate() {
     requestAnimationFrame(animate);
+
+    tiempo += 0.01;
 
     // Rotar sol ligeramente
     if (sun) {
       sun.rotation.z += 0.001;
     }
 
-    // Mover nubes
-    clouds.forEach((cloud, i) => {
-      cloud.position.x += 0.002 * (i + 1);
-      if (cloud.position.x > 6) {
-        cloud.position.x = -6;
-      }
-    });
+    // Mover nubes toon (horizontal + flotación + respiración)
+    if (clouds) {
+      clouds.forEach((cloud) => {
+        cloud.position.x += cloud.userData.vx;
+        if (cloud.position.x > 8) cloud.position.x = -8;
+
+        const phase = cloud.userData.phase;
+        const baseY = cloud.userData.baseY;
+        const baseScale = cloud.userData.baseScale;
+
+        cloud.position.y = baseY + Math.sin(tiempo + phase) * 0.15;
+        cloud.scale.x = baseScale * (1 + Math.sin(tiempo * 1.2 + phase) * 0.03);
+        cloud.scale.y = baseScale * (1 + Math.cos(tiempo * 1.0 + phase) * 0.03);
+      });
+    }
 
     renderer.render(scene, camera);
   }
@@ -453,7 +560,7 @@ import Earth from "./icons/Earth.astro";
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
-    
+
     // Actualizar tamaño del gradiente cuando cambia el viewport
     updateSkyGradientSize();
   }
@@ -467,4 +574,3 @@ import Earth from "./icons/Earth.astro";
   // Actualizar cada minuto
   setInterval(updateJumbotronByTime, 60000);
 </script>
-
