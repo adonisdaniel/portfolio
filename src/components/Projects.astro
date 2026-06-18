@@ -1,9 +1,10 @@
 ---
 import { projectsData } from '../helpers/projects-data';
 import ProjectCard from './ProjectCard.astro';
+import SectionWrapper from './SectionWrapper.astro';
 ---
 
-<section id="projects">
+<SectionWrapper id="projects">
   <div>
     <h3>PROJECTS</h3>
     <div class="projects-grid">
@@ -16,7 +17,7 @@ import ProjectCard from './ProjectCard.astro';
     }
     </div>
   </div>
-</section>
+</SectionWrapper>
 
 <style>
     .projects-grid {
