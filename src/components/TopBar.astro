@@ -91,17 +91,19 @@ import Logo from "./Logo.astro";
     position: fixed;
     inset: 0;
     background-color: var(--color-bg-medium);
-    transform: translateY(-100%);
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 99;
     box-sizing: border-box;
     overflow-y: auto;
-    pointer-events: none; /* Usar esto en lugar de visibility */
+    pointer-events: none;
   }
 
   .menu-items-container-show {
-    transform: translateY(0);
-    pointer-events: auto; /* Habilitar interacción cuando está abierto */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .menu-items {
@@ -251,7 +253,9 @@ import Logo from "./Logo.astro";
       background-color: transparent;
       padding: 0;
       gap: 2.5rem;
-      pointer-events: auto; /* Siempre habilitado en desktop */
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
       overflow-y: visible;
     }
 
@@ -274,32 +278,32 @@ import Logo from "./Logo.astro";
   let scrollPosition = 0;
 
   function openMenu() {
-    // Guardar posición actual del scroll
-    scrollPosition = window.pageYOffset;
-    
-    menuButton?.classList.add('hidden');
-    menuItems?.classList.add('menu-items-container-show');
-    
-    // Bloquear scroll y mantener posición
-    body.style.overflow = 'hidden';
+    scrollPosition = window.scrollY;
+
     body.style.position = 'fixed';
     body.style.top = `-${scrollPosition}px`;
+    body.style.left = '0';
+    body.style.right = '0';
     body.style.width = '100%';
+    body.style.background = 'linear-gradient(to bottom right, var(--color-primary-darker), var(--color-background))';
+
+    menuButton?.classList.add('hidden');
+    menuItems?.classList.add('menu-items-container-show');
     body.classList.add('menu-open');
   }
 
   function closeMenu() {
-    menuButton?.classList.remove('hidden');
-    menuItems?.classList.remove('menu-items-container-show');
-    
-    // Restaurar scroll
-    body.style.overflow = '';
     body.style.position = '';
     body.style.top = '';
+    body.style.left = '';
+    body.style.right = '';
     body.style.width = '';
+    body.style.background = '';
+
+    menuButton?.classList.remove('hidden');
+    menuItems?.classList.remove('menu-items-container-show');
     body.classList.remove('menu-open');
-    
-    // Restaurar posición del scroll
+
     window.scrollTo(0, scrollPosition);
   }
 

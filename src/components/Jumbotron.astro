@@ -90,7 +90,7 @@ import Earth from "./icons/Earth.astro";
   }
 
   .jumbotron-title {
-    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-size: var(--fs-display);
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 1rem;
@@ -101,7 +101,7 @@ import Earth from "./icons/Earth.astro";
   }
 
   .greeting {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: var(--fs-subtitle);
     font-weight: 400;
     opacity: 0.9;
     animation: fadeInUp 0.8s ease 0.2s both;
@@ -112,7 +112,7 @@ import Earth from "./icons/Earth.astro";
   }
 
   .jumbotron-subtitle {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: var(--fs-subtitle);
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 1.5rem;
     font-weight: 600;
@@ -120,7 +120,7 @@ import Earth from "./icons/Earth.astro";
   }
 
   .jumbotron-description {
-    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-size: var(--fs-body);
     color: rgba(255, 255, 255, 0.8);
     max-width: 600px;
     margin: 0 auto 2rem;
@@ -147,7 +147,7 @@ import Earth from "./icons/Earth.astro";
   .time-text {
     color: rgba(255, 255, 255, 0.95);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--fs-sm);
   }
 
   @keyframes fadeInUp {

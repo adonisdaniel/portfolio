@@ -32,6 +32,15 @@
   --text-accent: #0582CA;         /* Enlaces y destacados - azul medio */
 
   --cursor-color: #f7629a;
+
+  /* Escala tipográfica */
+  --fs-display: clamp(2.5rem, 8vw, 5rem);
+  --fs-heading: clamp(1.5rem, 3vw, 2rem);
+  --fs-subtitle: clamp(1.2rem, 2.5vw, 1.5rem);
+  --fs-body: clamp(1rem, 1.4vw, 1.125rem);
+  --fs-body-lg: clamp(1.0625rem, 1.5vw, 1.25rem);
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
 }
 
 /* Contenedor global */
@@ -60,19 +69,19 @@ h1, h2 {
 }
 
 h1 {
-  font-size: clamp(1.8rem, 2.5vw, 2rem);
+  font-size: var(--fs-display);
   margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-size: var(--fs-heading);
   margin-bottom: 1.5rem;
 }
 
 /* Subtítulos */
 h3 {
   color: var(--text-subheading); /* Azul para diferenciación */
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: var(--fs-heading);
   font-weight: 600;
   margin-bottom: 1rem;
 }
@@ -80,7 +89,7 @@ h3 {
 /* Texto del cuerpo */
 p, li {
   color: var(--text-body); /* Gris claro, menos intenso que blanco */
-  font-size: clamp(.6rem, 1.6vw, 1rem);
+  font-size: var(--fs-body);
   line-height: 1.7; /* Mayor espacio para mejor legibilidad */
   font-weight: 400;
 }
@@ -88,7 +97,7 @@ p, li {
 /* Texto secundario (fechas, descripciones cortas) */
 .text-muted, small {
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
 }
 
 /* Enlaces */
