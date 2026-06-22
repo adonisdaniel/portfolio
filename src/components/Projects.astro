@@ -9,9 +9,15 @@ import SectionWrapper from './SectionWrapper.astro';
     <h3>PROJECTS</h3>
     <div class="projects-grid">
     {
-      projectsData.map(({ title, description, stack,preview }) => {
+      projectsData.map(({ title, description, stack, image, category }) => {
         return (
-          <ProjectCard title={title} description={description} stack={stack} preview={preview} />
+          <ProjectCard
+            title={title}
+            description={description}
+            stack={stack}
+            image={image}
+            category={category}
+          />
         );
       })
     }
