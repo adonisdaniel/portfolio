@@ -8,6 +8,7 @@ export const projectsData: IProject[] = [
     stack: ["VUE 3", "PINIA", "AXIOS", "SOCKET IO"],
     category: "BACKOFFICE",
     image: "projects/ch-admin.webp",
+    alt: "Center Horses back office dashboard showing configuration panels, client management and downloadable reports.",
   },
   {
     title: "CENTER HORSES WEB",
@@ -16,6 +17,7 @@ export const projectsData: IProject[] = [
     stack: ["VUE 3", "PINIA", "AXIOS", "SSE"],
     category: "FRONTEND",
     image: "projects/ch-web.webp",
+    alt: "Center Horses player interface: real-time wagering screen with live race visualization.",
   },
   {
     title: "SPRINT GAMING BO 2.0",
@@ -24,6 +26,7 @@ export const projectsData: IProject[] = [
     stack: ["VUE 3", "PINIA", "AXIOS", "SOCKET IO"],
     category: "BACKOFFICE",
     image: "projects/sprint-admin-2.webp",
+    alt: "Sprint Gaming 2.0 back office: multi-game configuration panel with operators, currencies and reports.",
   },
   {
     title: "SPRINT GAMING BO",
@@ -32,6 +35,7 @@ export const projectsData: IProject[] = [
     stack: ["VUE 2", "VUEX", "AXIOS", "SOCKET IO"],
     category: "BACKOFFICE",
     image: "projects/sprint-admin.webp",
+    alt: "Sprint Gaming legacy back office: Vue 2 admin for configuring games, clients and operators.",
   },
   {
     title: "SPRINT GAMING - AWARD ADMIN",
@@ -39,6 +43,7 @@ export const projectsData: IProject[] = [
       "Frontend for the sprint gamings game suite. Here crupiers can close rounds sending the results to the backend.",
     stack: ["SVELTE", "AXIOS"],
     category: "FRONTEND",
+    alt: "Sprint Gaming Award Admin: Svelte-built croupier tool for closing rounds and submitting results.",
   },
   {
     title: "SPRINT GAMING API",
@@ -46,6 +51,7 @@ export const projectsData: IProject[] = [
       "Here I worked creating queries to mongo db, recieving data from another project in c# that send us rounds for a game. The project in builded with Hexagonal Architecture, or DDD.",
     stack: ["ADONIS JS v5", "MONGOOSE", "REDIS", "AXIOS", "SOCKET IO"],
     category: "BACKEND",
+    alt: "Sprint Gaming API: AdonisJS v5 backend with MongoDB and Redis, built on hexagonal / DDD architecture.",
   },
   {
     title: "CENTER HORSES API",
@@ -53,5 +59,6 @@ export const projectsData: IProject[] = [
       "Here I worked creating queries to postgres db, also the logic of the game. Configs for clients, users, limits, etc.",
     stack: ["ADONIS JS v6", "POSTGRES", "REDIS", "AXIOS", "SSE"],
     category: "BACKEND",
+    alt: "Center Horses API: AdonisJS v6 backend with PostgreSQL and Redis, handling game logic and client configuration.",
   },
 ];
