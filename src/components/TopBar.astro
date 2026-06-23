@@ -67,8 +67,13 @@ import Logo from "./Logo.astro";
     background: rgba(3, 16, 24, 0.55);
     border-radius: 12px;
     overflow: hidden;
-    backdrop-filter: blur(14px) ;
-    -webkit-backdrop-filter: blur(14px) ;
+    backdrop-filter: blur(14px);
+  }
+
+  @supports not (backdrop-filter: blur(14px)) {
+    .topbar-inner {
+      -webkit-backdrop-filter: blur(14px);
+    }
   }
 
   .topbar-progress {
