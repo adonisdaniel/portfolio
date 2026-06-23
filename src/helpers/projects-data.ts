@@ -23,7 +23,7 @@ export const projectsData: IProject[] = [
       "Back Office for the sprint gamings game suite. Here the games can be configured, client, operators, currencies. Also see reports and download them",
     stack: ["VUE 3", "PINIA", "AXIOS", "SOCKET IO"],
     category: "BACKOFFICE",
-    // image: "projects/sprint-gaming-bo-2.png",
+    image: "projects/sprint-admin-2.webp",
   },
   {
     title: "SPRINT GAMING BO",
