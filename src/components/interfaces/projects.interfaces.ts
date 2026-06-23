@@ -4,4 +4,5 @@ export interface IProject {
   stack: string[];
   image?: string;
   category?: string;
+  alt?: string;
 }

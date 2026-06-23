@@ -6,10 +6,10 @@ import SectionWrapper from './SectionWrapper.astro';
 
 <SectionWrapper id="projects">
   <div>
-    <h3>PROJECTS</h3>
+    <h2>Projects</h2>
     <div class="projects-grid">
     {
-      projectsData.map(({ title, description, stack, image, category }) => {
+      projectsData.map(({ title, description, stack, image, category, alt }) => {
         return (
           <ProjectCard
             title={title}
@@ -17,6 +17,7 @@ import SectionWrapper from './SectionWrapper.astro';
             stack={stack}
             image={image}
             category={category}
+            alt={alt}
           />
         );
       })

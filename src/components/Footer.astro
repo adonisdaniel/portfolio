@@ -1,7 +1,15 @@
 ---
+import { profile } from "../data/profile";
 import GitHub from "./icons/GitHub.astro";
 import Linkedin from "./icons/Linkedin.astro";
 import Instagram from "./icons/Instagram.astro";
+
+const [github, linkedin, instagram] = profile.sameAs;
+const socials = [
+  { label: "GitHub", href: github, Icon: GitHub },
+  { label: "LinkedIn", href: linkedin, Icon: Linkedin },
+  { label: "Instagram", href: instagram, Icon: Instagram },
+];
 ---
 
 <section class="footer">
@@ -17,36 +25,21 @@ import Instagram from "./icons/Instagram.astro";
 
       <div class="footer-block">
         <h3>Social Media</h3>
-        <p class="social-media-icons">
-          <GitHub />
-          <a
-            href="https://github.com/adonisdaniel"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-media-icons-link">GitHub</a
-          >
-        </p>
-        <p class="social-media-icons">
-          <Linkedin />
-          <a
-            href="https://www.linkedin.com/in/adonis-mendoza-4a7696197/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-media-icons-link">LinkedIn</a
-          >
-        </p>
-        <p class="social-media-icons">
-          <Instagram /><a
-            href="https://www.instagram.com/thefororomachine/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-media-icons-link">Instagram</a
-          >
-        </p>
+        {socials.map(({ label, href, Icon }) => (
+          <p class="social-media-icons">
+            <Icon />
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-media-icons-link">{label}</a
+            >
+          </p>
+        ))}
       </div>
 
       <div class="footer-block footer-copy">
-        <p>Adonis Mendoza · Web Developer</p>
+        <p>{profile.name} · {profile.jobTitle}</p>
       </div>
     </div>
   </footer>

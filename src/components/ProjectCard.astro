@@ -5,17 +5,19 @@ interface Props {
   stack: string[];
   image?: string;
   category?: string;
+  alt?: string;
 }
 
-const { title, description, stack, image, category } = Astro.props;
+const { title, description, stack, image, category, alt } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const imageSrc = image ? `${base}/${image}` : undefined;
+const imageAlt = alt ?? `${title} — ${category ?? "project"} preview`;
 ---
 
 <article class:list={["project-card", { "has-image": !!image }]}>
   {imageSrc && (
     <figure class="project-image">
-      <img src={imageSrc} alt={`${title} preview`} loading="lazy" decoding="async" />
+      <img src={imageSrc} alt={imageAlt} width="1920" height="1080" loading="lazy" decoding="async" />
       <div class="project-image-overlay" aria-hidden="true"></div>
       {category && <span class="project-badge">{category}</span>}
     </figure>
