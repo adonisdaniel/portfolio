@@ -2,6 +2,15 @@ import type { IProject } from "../components/interfaces/projects.interfaces";
 
 export const projectsData: IProject[] = [
   {
+    title: "PROTON ENERGY SL - WEB",
+    description:
+      "Web page for Proton Energy Sl. Official 24-hour technical service in Madrid. Repair and installation of air conditioners, refrigerators, and household appliances with certified warranty.",
+    stack: ["ASTRO", "NETLIFY", ],
+    category: "FRONTEND",
+    image: "projects/proton-energy-app.webp",
+    alt: "Proton Energy Sl. Showing home and contact view.",
+  },
+  {
     title: "CENTER HORSES BO",
     description:
       "Back Office for center horses game. Here the game can be configured, client, currencies. Also see reports and download them.",
